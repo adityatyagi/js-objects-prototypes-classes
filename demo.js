@@ -107,4 +107,85 @@
   // prints same for alot more code
   display(student4);
 
+  // ---------------------------------------------------------
+
+  let parent = {
+    "first name": 'Kabir',
+    "last name": "Singh",
+    phoneNumber: '9811506498',
+    address: {
+      houseNo: 45,
+      lane: 3
+    },
+    parentsName: {
+      firstName: 'Rohan',
+      lastName: 'Singh'
+    }
+  };
+
+  let lastName = "last name";
+  display(parent['first name']);
+  display(parent[lastName]);
+
+  // Object.defineProperty(parent, "phoneNumber", { configurable: false });
+
+  // changing a property's writable property
+  Object.defineProperty(parent, "phoneNumber", { writable: false });
+
+  // This will not allow me to change the address property i.e will not allow me to let it point another object. 
+  // But I will still be able to change the values on the address object.
+  // the "address" pointer is just a pointer to an object in memory and when you make it read-only, so the only thing you are doing is
+  // preventing it to point to some other object.
+  Object.defineProperty(parent, "address", { writable: false });
+
+
+  // throws error
+  // parent.address = {};
+
+  // does not throw error
+  parent.address.houseNo = 77;
+
+  // making address not enumerable
+  Object.defineProperty(parent, "address", { enumerable: false });
+
+  // will only print enumerable properties
+  for (const key in parent) {
+    if (parent.hasOwnProperty(key)) {
+      display(key + ': ' + parent[key]);
+    }
+  }
+
+  // the address property will also not show in Object.keys()
+  display(Object.keys(parent));
+
+
+  // throws error
+  // parent.phoneNumber = '9888888';
+  display(Object.getOwnPropertyDescriptor(parent, "phoneNumber"));
+
+  // GETTERS
+  // parentsFullName -> name of the getter
+  Object.defineProperty(parent, 'parentsFullName',
+    {
+      get: function () {
+        return this.parentsName.firstName + ' ' + this.parentsName.lastName;
+      },
+      set: function (value) {
+        let nameParts = value.split(' ');
+        this.parentsName.firstName = nameParts[0];
+        this.parentsName.lastName = nameParts[1];
+      }
+    }
+  );
+
+  // using getter
+  display(parent.parentsFullName);
+
+  // using setter
+  parent.parentsFullName = "Pankaj Singh";
+
+  display(parent.parentsName.firstName);
+  display(parent.parentsName.lastName);
+  display(parent.parentsFullName);
+
 })();

@@ -188,4 +188,100 @@
   display(parent.parentsName.lastName);
   display(parent.parentsFullName);
 
+  display('-------------------------------------------');
+
+  function Person2(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  display(Person2.prototype);
+
+  // changing only Person2's prototype also changes the prototype of the object created using the same function.
+  Person2.prototype.age = 24;
+
+  let jim = new Person2('Jim', 'Koopar');
+  let hero = new Person2('Hero', 'Kapoor');
+
+  display(jim.__proto__);
+  display(hero.__proto__);
+
+  // changing ant property on the prototype of an object created using the function constructor, will change the prototypes of all.
+  // therefore, this is the same prototype
+  hero.__proto__.age = 55;
+
+  display(jim.__proto__ === Person2.prototype);
+
+  let ayush = new Person2('Ayush', 'Tyagi');
+
+  ayush.age = 18; // the age is present on the ayush object.
+  display(ayush.hasOwnProperty('age')); // when the original ayush object has "age" as its own property and not only on its prototype
+  display(ayush.age); // age is not present on the ayush object, it is present on the prototype of ayush object.
+  display(ayush.__proto__.age); // even though the ayush object has a property "age" of its own, it also has the age property on its prototype
+
+  display('-------------------------------------------');
+
+  display(ayush.__proto__);
+  display(ayush.__proto__.__proto__);
+  display(ayush.__proto__.__proto__.__proto__);
+
+
+  display('-------------------------------------------');
+
+  // creating your own prototypal chain
+
+  // PARENT - constructor function
+  function PersonForCollege(firstName, lastName, age) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.age = age;
+
+    // getters and setters
+    Object.defineProperty(this, 'fullName', {
+      get: function () {
+        return this.firstName + ' ' + this.lastName;
+      },
+      enumerable: true
+    });
+  }
+
+  // CHILD - constructor function
+  // Make student inherit from person
+  function StudentForCollege(firstName, lastName, age) {
+
+    // calling the parent
+    // this will add all the properties of the parent to the child as well and will be visible on logging
+    PersonForCollege.call(this, firstName, lastName, age);
+
+    this._enrolledCourses = [];
+
+    this.enroll = function (courseId) {
+      this._enrolledCourses.push(courseId);
+    }
+
+    this.getCourses = function () {
+
+      // we are also able to access the parents properties using "this" like fullName
+      return this.fullName + ' enrolled courses are: ' + this._enrolledCourses.join(', ');
+    }
+  }
+
+  // Inherit person
+  // These 2 lines are always required to create a Prototypal Inheritance chain
+  // display(StudentForCollege.prototype.constructor);
+  StudentForCollege.prototype = Object.create(PersonForCollege.prototype);
+  // display(StudentForCollege.prototype.constructor);
+  StudentForCollege.prototype.constructor = StudentForCollege;
+  // display(StudentForCollege.prototype.constructor);
+
+  let jimmy = new StudentForCollege('Jimmy', 'Kooper', 18);
+
+  display(jimmy);
+  display(jimmy.__proto__);
+  display(jimmy.__proto__.__proto__);
+
+  jimmy.enroll('CS101');
+  jimmy.enroll('MAT01');
+  display(jimmy.getCourses());
+
 })();

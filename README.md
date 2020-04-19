@@ -193,6 +193,65 @@ Get a value through a function and set a value through a function.
 
 # JAVASCRIPT PROTOTYPES AND INHERITANCE
 
+**A Function's Prototype**  
+A function's prototype is the object instance that will become the prototype of all objects created using this function as a function constructor.  
+Every function in JS has a `prototype` property.  
+
+**A Object's prototype**  
+An object's prototype is the object instance from which the object is inherited.  
+Every object has a prototype but not as its property.
+
+Therefore, an object's prototype and a function's prototype are different. 
+
+When you try to access a property on an object, it first looks in the main object to have a property by that name, if it fails to find it there, then it looks on it prototype. The instance properties overrides the prototypes properties.  
+
+When you create a Function Constructor, an empty object with the name of the Function Constructor is also created in the memory. This empty object is the prototype obejct for that Function Constructor.  
+![image](https://user-images.githubusercontent.com/18363595/79683353-1bdd5380-8247-11ea-8cc2-11844a9ef08d.png)
+
+
+## CHANGING A FUNCTION'S PROTOTYPE
+Now, if we make the Function Constructor's prototype to point to a completely new object in memory, then we'll be able to change the protoype the changes wont reflect on the object instances made from that Function constructor before changing the prototype.  
+
+![image](https://user-images.githubusercontent.com/18363595/79683448-d40afc00-8247-11ea-9f76-9995f93009eb.png)
+
+## OBJECT INHERITANCE  
+There are multiple levels of inheritance for the prototypes. The last one is when you hit `null` while moving up the prototypal chain. This is usually the case when you hit the `Object`'s prototype.  By default, all object's in JS inherit from `Object` and `Object` has no prototype.
+
+```javascript
+function Person2(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+}
+
+let ayush = new Person2('Ayush', 'Tyagi');
+
+display(ayush.__proto__);
+display(ayush.__proto__.__proto__);
+display(ayush.__proto__.__proto__.__proto__); // null
+
+```
+
+## CREATING YOUR OWN PROTOTYPAL CHAIN
+To create a Prototypal chain, the three lines you use are:  
+
+```javascript
+
+  // 1.
+  StudentForCollege.prototype = Object.create(PersonForCollege.prototype);
+
+  // 2.
+  StudentForCollege.prototype.constructor = StudentForCollege;
+
+
+  // and calling the Parent function constructor from the child and passing the the context via "this"
+  PersonForCollege.call(this, firstName, lastName, age); 
+```
+
+1. We are using `Object.create()` and not `new` keyword to set the `StudentForCollege`'s prototype because if we use the `new` keyword, it will execute the `PersonForCollege()` function at this point. But we dont want that. We dont want to call the `PersonForCollege()` until we are actually creating a new student using `new StudentForCollege()`.  This also changes the `constructor` property on the prototype of `StudentForCollege` as a side effect. Hence, we need to explicitly set the constructor back to `StudentForCollege` in step 2.
+
+2. All prototypes have a `constructor` property that points to the function that is used to create it. This is used to set the `constructor` property of the prototype of the `StudentForCollege` which was changed as a side effect by Step 1.  
+
+
 
 
 

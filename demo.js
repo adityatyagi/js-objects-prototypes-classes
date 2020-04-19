@@ -284,4 +284,78 @@
   jimmy.enroll('MAT01');
   display(jimmy.getCourses());
 
+  display('-------------------CLASSES------------------------');
+  class PersonForCollege2 {
+    constructor(firstName, lastName, age) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.age = age;
+    }
+
+    get fullName() {
+      return this.firstName + ' ' + this.lastName;
+    }
+
+    set fullName(fullName) {
+      var names = fullName.split(' ');
+      this.firstName = names[0];
+      this.lastName = names[1];
+    }
+
+    isAdult() {
+      return this.age > 18 ? true : false;
+    }
+  }
+
+  let tom = new PersonForCollege2('Tom', 'Holland', 18);
+
+  // setter
+  tom.fullName = 'Aditya Tyagi';
+
+  // getter
+  display(tom.fullName);
+
+  display(tom.isAdult());
+
+  // changing property descriptors of getter on a class
+  Object.defineProperty(PersonForCollege2.prototype, 'fullName', { enumerable: true });
+
+  display(tom);
+
+  display('-------------------INHERITANCE IN CLASSES------------------------');
+
+  class StudentForCollege2 extends PersonForCollege2 {
+    constructor(firstName, lastName, age) {
+      super(firstName, lastName, age); // this calls the constructor of the class we are extending
+      this._enrolledCourses = [];
+    }
+
+    enroll(courseId) {
+      this._enrolledCourses.push(courseId);
+    }
+
+    getCourses() {
+      return this.fullName + ' has courses: ' + this._enrolledCourses.join(', ');
+    }
+
+    // static methods
+    static fromPerson(person) {
+      return new StudentForCollege2(person.firstName, person.lastName, person.age);
+    }
+
+    // static property
+    static adultAge = 18;
+
+  }
+
+  let pinky = new StudentForCollege2('Pinky', 'Tyagi', 29);
+  display(pinky);
+
+  let newPer = new PersonForCollege2('Anant', 'Tyagi', 26);
+
+  display(StudentForCollege2.fromPerson(newPer));
+  display(StudentForCollege2.adultAge);
+
+
+
 })();

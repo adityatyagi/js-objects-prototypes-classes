@@ -251,6 +251,110 @@ To create a Prototypal chain, the three lines you use are:
 
 2. All prototypes have a `constructor` property that points to the function that is used to create it. This is used to set the `constructor` property of the prototype of the `StudentForCollege` which was changed as a side effect by Step 1.  
 
+***  
+
+# CLASSES
+Classes play the exact same role as the constructor functions. They are templates for creating objects and containing logic. Classes are syntactic sugar to do everything you can do using Function Constructors.  
+
+## CREATING OBJECTS, GETTERS, SETTERS, FUNCTIONS
+```javascript
+
+  class PersonForCollege2 {
+    constructor(firstName, lastName, age) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.age = age;
+    }
+
+    get fullName() {
+      return this.firstName + ' ' + this.lastName;
+    }
+
+    set fullName(fullName) {
+      var names = fullName.split(' ');
+      this.firstName = names[0];
+      this.lastName = names[1];
+    }
+
+    isAdult() {
+      return this.age > 18 ? true : false;
+    }
+  }
+
+  let tom = new PersonForCollege2('Tom', 'Holland', 18);
+  display(tom);
+```
+
+NOTE:  
+When you create a getter, you create it with `enumerable` property set to false. This means that while you console.log(object) created using the class, the getter will not show.  
+
+The Getters and Setters in the class live on the prototype and if I want to change property descriptors, then I have to use `Object.defineProperty()` on the prototype of class.  
+
+
+## MODIFYING PROPERTY DESCRIPTORS
+```javascript
+  // changing property descriptors of getter on a class
+  Object.defineProperty(PersonForCollege2.prototype, 'fullName', { enumerable: true });
+```
+## INHERITANCE IN CLASSES
+ Use `extend` and `super()`.  
+
+ ```javascript
+   class StudentForCollege2 extends PersonForCollege2 {
+    constructor(firstName, lastName, age) {
+      super(firstName, lastName, age); // this calls the constructor of the class we are extending
+      this._enrolledCourses = [];
+    }
+
+    enroll(courseId) {
+      this._enrolledCourses.push(courseId);
+    }
+
+    getCourses() {
+      // able to access "fullName" property defined on the parent class
+      return this.fullName + ' has courses: ' + this._enrolledCourses.join(', ');
+    }
+
+  }
+```
+
+## STATIC PROPERTIES AND METHODS
+Static properties and methods are items on the class that you can access without creating an instance of the class.  
+They will have a single copy which will be used by all the instances created from that class.  
+Calling static properties and methods is simple. You just call it via the class name with a dot notation. `Student.property`, without making any instance of the class.  
+
+```javascript
+  class StudentForCollege2 extends PersonForCollege2 {
+    constructor(firstName, lastName, age) {
+      super(firstName, lastName, age); // this calls the constructor of the class we are extending
+      this._enrolledCourses = [];
+    }
+
+    enroll(courseId) {
+      this._enrolledCourses.push(courseId);
+    }
+
+    getCourses() {
+      return this.fullName + ' has courses: ' + this._enrolledCourses.join(', ');
+    }
+
+    // static methods
+    static fromPerson(person) {
+      return new StudentForCollege2(person.firstName, person.lastName, person.age);
+    }
+
+    // static property
+    static adultAge = 18;
+
+  }
+```
+
+
+
+
+
+
+
 
 
 

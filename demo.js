@@ -357,5 +357,72 @@
   display(StudentForCollege2.adultAge);
 
 
+  display('-------------------MATH OBJECT------------------------');
+  display(Math.PI);
+  display(Math.max(1, 2, 44, 3, 21));
+
+  display('-------------------DATE OBJECT------------------------');
+
+  // the "Month" is 0 based, rest all are 1 based. Therefore 3 here will show April and not March.
+  let date = new Date(2020, 3, 12, 16, 12, 12, 12);
+  display(date.toString());
+
+  // determining how much time has passed between two dates - subtract them
+  let date1 = new Date(2050, 3, 25, 13, 1, 30, 15);
+  let date2 = new Date(2050, 3, 25, 13, 1, 30, 20);
+
+  display(date2 - date1); // 5 milliseconds
+
+  display('-------------------REGEX OBJECT------------------------');
+  function checkPasswordComplexity(password) {
+
+    // when regex is in string, we have to provide an additional \ (backslash)
+    // RegExp() takes a second parameter - the regex flags. g: global, i: ignore case
+    // let regex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$', 'gi');
+
+    // alterante way to create a regex, so that we dont have to worry about escaping characters
+    let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$/gi;
+
+    return regex.test(password);
+  }
+
+  display(checkPasswordComplexity('weak'));
+
+  function findAlerts(logData) {
+    // let regex = /ERROR.*?:/g;
+
+    // CREATING CAPTURE GROUPS
+    // 1. Capture the level of error
+    // 2. Capture the error message
+    let regex = /ERROR(.*?):(.*?);/g;
+
+    // this will only call the regex twice
+    // displayRegexArray(regex.exec(logData));
+    // display('---------------');
+    // displayRegexArray(regex.exec(logData));
+
+    // return regex.exec(logData);
+
+    // keep finding the error until there are no more
+    let result = regex.exec(logData);
+    while (result !== null) {
+      display(result[1]);
+      display(result[2]);
+      display('--------------------******-----------------');
+      result = regex.exec(logData);
+    }
+
+  }
+
+  let logData = 'INFO:OK;ERROR(HIGH):Something broke;INFO:SAMPLE;ERROR(LOW):Something broke;';
+  findAlerts(logData);
+  // display(findAlerts(logData));
+  // display(findAlerts(logData)); // same result, even with the flag because we are creating regex again - this resets the regex.
+  // display(result);
+
+  // display(result[0]); // accessing array
+  // display(result.index); // where did the match was found
+  // display(result.input); // original string
+
 
 })();

@@ -349,6 +349,59 @@ Calling static properties and methods is simple. You just call it via the class 
   }
 ```
 
+# JS BUILT-IN OBJECTS
+
+## [MATH](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math)
+All the methods and properties on the Math object are static. We dont have to create an instance of Math object to use them. Because they are static, you can use them directly.  
+
+```javascript
+  display(Math.PI);
+  display(Math.max(1, 2, 44, 3, 21));
+```
+
+## [DATE](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
+The dates are calculated from Jan, 1 1970 (Universal Time Zone). This is called UNIX EPOC time.  
+
+```javascript
+  // the "Month" is 0 based, rest all are 1 based. Therefore 3 here will show April and not March.
+  let date = new Date(2020, 3, 12, 16, 12, 12, 12);
+  display(date.toString());
+```
+
+## [REGEX](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+
+```javascript
+  function checkPasswordComplexity(password) {
+
+    // when regex is in string, we have to provide an additional \ (backslash)
+    // RegExp() takes a second parameter - the regex flags. g: global, i: ignore case
+    // let regex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$', 'gi');
+
+    // alterante way to create a regex, so that we dont have to worry about escaping characters
+    let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$/gi;
+
+    return regex.test(password);
+  }
+
+  display(checkPasswordComplexity('weak'));
+```
+
+### EXEC
+THe `Regex.exec()` is a method which helps to find a particular "thing" in a long string and returns an array as soon as it finds the first match.  It is used to search a string. But instead of returning a boolean value like `test()`, it returns the matching string
+
+Always ensure that the while calling exec. you create the regex once and call the exec() multiple times (with the flag). Not the other way round. If the flag is ommited, then each time it will find the first match and stop trying. 
+
+If you are not using regex flags like global, then the regex.exec() will always return the same result.
+
+If you are calling regex.exec() multiple times after creating the regex once, exec() will use its internal state management and provide you with the next match, instead of the first.  It uses it to track where it is in searching string for future calls.
+
+The array which regex.exec() returns has 3 properties: Regex match, index, input(original text input).  
+
+### CAPTURE GROUPS
+**Why does the regex.exec() returns an array even if there is a single match?**  
+CAPUTRE GROUPS: They allow you to capture and return data from within the input strings.  
+The `( )` creates capture groups.  
+
 
 
 
